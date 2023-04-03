@@ -2,33 +2,31 @@ package com.tortones.APItortones.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "productos")
+@Table(name = "porciones")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"fecha_creacion", "fecha_actualizacion"}, allowGetters = true)
-public class Producto {
+public class Porcion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "url_imagen", nullable = false)
-    private String urlImagen;
+    @Column(name = "peso", nullable = false)
+    private String peso;
 
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
+    @Column(name = "porcion", nullable = false)
+    private String porcion;
 
-    @Column(name = "descripcion", nullable = false)
-    private String descripcion;
-
-    @Column(name = "precio_unidad", nullable = false)
-    private Float precio;
+    @Column(name = "factor_precio", nullable = false)
+    private Float factorPrecio;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,24 +38,25 @@ public class Producto {
     @LastModifiedDate
     private Date fechaActualizacion;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = false)
-    @JsonManagedReference(value = "productoCompra-producto")
+    @OneToMany(mappedBy = "porcion", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference(value = "porciones-producto-compra")
     private List<ProductoCompra> productoCompra;
 
-    public Producto(Long id, String urlImagen, String nombre, String descripcion, Float precio, List<ProductoCompra> productoCompra) {
+    public Porcion(Long id, String peso, String porcion, Float factorPrecio, List<ProductoCompra> productoCompra, Date fechaCreacion, Date fechaActualizacion) {
         this.id = id;
-        this.urlImagen = urlImagen;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
+        this.peso = peso;
+        this.porcion = porcion;
+        this.factorPrecio = factorPrecio;
         this.productoCompra = productoCompra;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaActualizacion = fechaActualizacion;
     }
 
-    public Producto(Long id) {
+    public Porcion(Long id) {
         this.id = id;
     }
 
-    public Producto() {
+    public Porcion() {
     }
 
     public Long getId() {
@@ -68,36 +67,28 @@ public class Producto {
         this.id = id;
     }
 
-    public String getUrlImagen() {
-        return urlImagen;
+    public String getPeso() {
+        return peso;
     }
 
-    public void setUrlImagen(String urlImagen) {
-        this.urlImagen = urlImagen;
+    public void setPeso(String peso) {
+        this.peso = peso;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getPorcion() {
+        return porcion;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setPorcion(String porcion) {
+        this.porcion = porcion;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public Float getFactorPrecio() {
+        return factorPrecio;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Float getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(Float precio) {
-        this.precio = precio;
+    public void setFactorPrecio(Float factorPrecio) {
+        this.factorPrecio = factorPrecio;
     }
 
     public List<ProductoCompra> getProductoCompra() {
